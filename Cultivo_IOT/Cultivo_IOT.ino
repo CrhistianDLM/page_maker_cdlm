@@ -45,7 +45,7 @@ void setup() {
 
 
 void loop() {
-  distancia=0;
+  distancia=conversion(TriggerPin, EchoPin);
  temperatura = analogRead(analog_pin);
   temperatura = (500.0*temperatura)/1024;
   // listen for incoming clients
@@ -136,4 +136,16 @@ client.println("</canvas>");
 
 //funcion para leer datos del sensor de ultrasonido
 
+float conversion(uint8_t TriggerPin, uint8_t EchoPin) {
+  float duracion, distancia;
+  
+  digitalWrite(TriggerPin, LOW);  //para generar un pulso limpio ponemos a LOW 4us
+  delayMicroseconds(4);
+  digitalWrite(TriggerPin, HIGH);  //generamos Trigger (disparo) de 10us
+  delayMicroseconds(10);
+  digitalWrite(TriggerPin, LOW);
+  duracion = pulseIn(EchoPin, HIGH);  //medimos el tiempo entre pulsos, en microsegundos
+  distancia = duracion * 0.01715;//343m/s*100cm/1000000us=0.01715convertimos a distancia, en cm
+  return distancia;
+}
 
